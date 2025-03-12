@@ -1,5 +1,7 @@
 # README
 
+⚠️ This repository is under development.
+
 ## About
 
 This is the official Wails React-TS template.
