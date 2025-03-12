@@ -1,13 +1,37 @@
 {
-  "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "TAPA",
-  "outputfilename": "TAPA",
-  "frontend:install": "npm install",
-  "frontend:build": "npm run build",
-  "frontend:dev:watcher": "npm run dev",
-  "frontend:dev:serverUrl": "auto",
-  "author": {
-    "name": "Amir Zouerami",
-    "email": "53701884+Amir-Zouerami@users.noreply.github.com"
-  }
+	"$schema": "https://wails.io/schemas/config.v2.json",
+	"name": "TAPA",
+	"outputfilename": "TAPA",
+	"frontend:install": "npm install",
+	"frontend:build": "npm run build",
+	"frontend:dev:watcher": "npm run dev",
+	"frontend:dev:serverUrl": "auto",
+	"obfuscated": false,
+	"info": {
+		"companyName": "",
+		"productName": "",
+		"productVersion": "1.0.0",
+		"copyright": "Copyright 2025 Amir Zouerami",
+		"comments": "The Actual Postman Alternative",
+		"fileAssociations": [
+			{
+				"ext": "tapa",
+				"name": "TAPA",
+				"description": "The Actual Postman Alternative",
+				"iconName": "tapa",
+				"role": "Editor"
+			}
+		],
+		"protocols": [
+			{
+				"scheme": "tapa",
+				"description": "TAPA protocol",
+				"role": "Editor"
+			}
+		]
+	},
+	"author": {
+		"name": "Amir Zouerami",
+		"email": "53701884+Amir-Zouerami@users.noreply.github.com"
+	}
 }
