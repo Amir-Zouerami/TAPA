@@ -8,13 +8,13 @@ assignees: ''
 ---
 
 ## Problem
-[Describe the problem at hand]
+_[Describe the problem at hand]_
 
 ## Goal
-[The goal of this feature and what it tries to achieve]
+_[The goal of this feature and what it tries to achieve]_
 
 ## Technical Details
-[The technical details of importance should be mentioned here]
+_[The technical details of importance should be mentioned here]_
 
 ## Additional Context
-[any relevant context for further clarification]
+_[any relevant context for further clarification]_
