@@ -1,25 +1,34 @@
 {
-  "name": "frontend",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@tailwindcss/vite": "^4.0.13",
-    "babel-plugin-react-compiler": "^19.0.0-beta-bafa41b-20250307",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "tailwindcss": "^4.0.13"
-  },
-  "devDependencies": {
-    "@types/react": "^19.0.10",
-    "@types/react-dom": "^19.0.4",
-    "@vitejs/plugin-react": "^4.3.4",
-    "typescript": "^4.6.4",
-    "vite": "^6.2.1"
-  }
+	"name": "frontend",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"@tanstack/react-router": "^1.114.3",
+		"@tanstack/react-router-devtools": "^1.114.3",
+		"@tanstack/router-plugin": "^1.114.3",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0"
+	},
+	"devDependencies": {
+		"@tailwindcss/vite": "^4.0.14",
+		"@testing-library/dom": "^10.4.0",
+		"@testing-library/react": "^16.2.0",
+		"@types/react": "^19.0.8",
+		"@types/react-dom": "^19.0.3",
+		"@vitejs/plugin-react": "^4.3.4",
+		"babel-plugin-react-compiler": "^19.0.0-beta-bafa41b-20250307",
+		"jsdom": "^26.0.0",
+		"tailwindcss": "^4.0.14",
+		"typescript": "^5.7.2",
+		"vite": "^6.1.0",
+		"vitest": "^3.0.5",
+		"web-vitals": "^4.2.4"
+	}
 }
