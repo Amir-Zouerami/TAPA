@@ -26,7 +26,7 @@ type appConfig struct {
 	OnStartup        func(ctx context.Context)
 }
 
-// GetAppConfig retrieves app configuration from environment variables.
+// GetAppConfig creates application configuration with default settings.
 func GetAppConfig(assets fs.FS, app *App) (*appConfig, error) {
 	icon, err := common.ReadEmbeddedFile(assets, TAPA_ICON_NAME)
 
