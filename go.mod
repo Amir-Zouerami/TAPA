@@ -1,6 +1,9 @@
 module github.com/Amir-Zouerami/TAPA
 
-go 1.23
+go 1.23.0
+
+toolchain go1.23.6
+
 require github.com/wailsapp/wails/v2 v2.10.1
 
 require (
