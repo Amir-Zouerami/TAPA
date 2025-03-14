@@ -4,35 +4,35 @@
 	font-family: 'Roboto';
 	src:
 		local(''),
-		url('assets/fonts/Roboto-Regular.ttf') format('ttf');
+		url('assets/fonts/Roboto-Regular.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Roboto Light';
 	src:
 		local(''),
-		url('assets/fonts/Roboto-Light.ttf') format('ttf');
+		url('assets/fonts/Roboto-Light.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Roboto Black';
 	src:
 		local(''),
-		url('assets/fonts/Roboto-Black.ttf') format('ttf');
+		url('assets/fonts/Roboto-Black.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Lobster';
 	src:
 		local(''),
-		url('assets/fonts/Lobster_1.3.otf') format('otf');
+		url('assets/fonts/Lobster_1.3.otf') format('opentype');
 }
 
 @font-face {
 	font-family: 'JetBrainsMono';
 	src:
 		local(''),
-		url('assets/fonts/JetBrainsMonoNerdFont-Regular.ttf') format('ttf');
+		url('assets/fonts/JetBrainsMonoNerdFont-Regular.ttf') format('truetype');
 }
 
 html {
