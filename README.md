@@ -87,7 +87,7 @@ wails dev
 ⚠️ **WARNING**: Setting `TAPA_ENV` environment variable (`TAPA_ENV=development wails dev`) will **FLUSH YOUR DATABASE** and seed it with placeholder data! Backup up everything before you attempt to do this. 
 
 ## 📜 License
-TAPA is open-source and available under the **MIT License**.
+TAPA is open-source and available under the **Apache License**.
 
 ---
 
