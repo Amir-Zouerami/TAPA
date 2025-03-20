@@ -3,8 +3,10 @@ package main
 import (
 	"embed"
 	"log"
+	"os"
 
 	"github.com/Amir-Zouerami/TAPA/internal/config"
+	"github.com/Amir-Zouerami/TAPA/internal/database"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 )
@@ -12,27 +14,39 @@ import (
 //go:embed all:frontend/dist build/tapa.png
 var assets embed.FS
 
+//go:embed internal/database/db-schema.sql
+var dbSchema embed.FS
+
 func main() {
 	app := config.NewApp()
-	config, err := config.GetAppConfig(assets, app)
 
+	db, err := database.InitializeDB(dbSchema)
 	if err != nil {
-		log.Fatal("Could not bootstrap the application \n", err)
+		log.Printf("Database initialization failed: %v\n", err)
+		os.Exit(1)
+	}
+	defer db.Close()
+
+	database.FlushAndSeedIfInDevelopmentMode(db)
+
+	appConfig, err := config.GetAppConfig(assets, app)
+	if err != nil {
+		log.Fatal("Could not bootstrap the application:\n", err)
 	}
 
 	err = wails.Run(&options.App{
-		Title:            config.Title,
-		Width:            config.Width,
-		Height:           config.Height,
-		WindowStartState: config.WindowStartState,
-		AssetServer:      config.AssetServer,
-		Linux:            config.Linux,
-		Mac:              config.Mac,
-		OnStartup:        config.OnStartup,
-		Bind:             config.Bind,
+		Title:            appConfig.Title,
+		Width:            appConfig.Width,
+		Height:           appConfig.Height,
+		WindowStartState: appConfig.WindowStartState,
+		AssetServer:      appConfig.AssetServer,
+		Linux:            appConfig.Linux,
+		Mac:              appConfig.Mac,
+		OnStartup:        appConfig.OnStartup,
+		Bind:             appConfig.Bind,
 	})
 
 	if err != nil {
-		println("Error:", err.Error())
+		log.Fatal("Error:", err.Error())
 	}
 }

@@ -35,16 +35,16 @@ func GetAppConfig(assets fs.FS, app *App) (*appConfig, error) {
 	}
 
 	return &appConfig{
-		Title:            "TAPA",
-		Width:            1024,
-		Height:           768,
+		Title:            APP_NAME,
+		Width:            APP_WIDTH,
+		Height:           APP_HEIGHT,
 		WindowStartState: options.Maximised,
 		OnStartup:        app.startup,
 		Linux: &linux.Options{
 			Icon: icon,
 		},
 		Mac: &mac.Options{
-			About: &mac.AboutInfo{Title: "TAPA", Message: "The Actual Postman Alternative"},
+			About: &mac.AboutInfo{Title: APP_NAME, Message: MACOS_ABOUT_MESSAGE},
 		},
 		AssetServer: &assetserver.Options{
 			Assets: assets,

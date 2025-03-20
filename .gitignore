@@ -11,6 +11,9 @@
 # Test binary, built with `go test -c`
 *.test
 
+# manual testing
+manual_testing/
+
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
@@ -23,7 +26,6 @@ go.work.sum
 
 # env file
 .env
-
 
 # vscode
 .vscode

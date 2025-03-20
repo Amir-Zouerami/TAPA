@@ -1,6 +1,6 @@
 # README
 
-⚠️ This repository is under development.
+⚠️ This repository is under heavy development.
 
 ## About
 
