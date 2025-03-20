@@ -2,6 +2,7 @@ package common
 
 import (
 	"io/fs"
+	"os"
 
 	"github.com/Amir-Zouerami/TAPA/internal/errors"
 )
@@ -13,4 +14,8 @@ func ReadEmbeddedFile(embed fs.FS, name string) ([]byte, error) {
 	}
 
 	return data, nil
+}
+
+func IsInDevelopmentMode() bool {
+	return os.Getenv("TAPA_ENV") == "development"
 }

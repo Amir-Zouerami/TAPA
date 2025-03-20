@@ -21,14 +21,15 @@ func main() {
 
 	db, err := database.InitializeDB(dbSchema)
 	if err != nil {
-		log.Fatal("Database initialization failed \n", err)
+		log.Fatal("Database initialization failed:\n", err)
 	}
-
 	defer db.Close()
+
+	database.FlushAndSeedIfInDevelopmentMode(db)
 
 	appConfig, err := config.GetAppConfig(assets, app)
 	if err != nil {
-		log.Fatal("Could not bootstrap the application \n", err)
+		log.Fatal("Could not bootstrap the application:\n", err)
 	}
 
 	err = wails.Run(&options.App{
@@ -44,6 +45,6 @@ func main() {
 	})
 
 	if err != nil {
-		println("Error:", err.Error())
+		log.Println("Error:", err.Error())
 	}
 }

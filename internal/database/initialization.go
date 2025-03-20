@@ -10,6 +10,7 @@ import (
 
 	_ "modernc.org/sqlite"
 
+	"github.com/Amir-Zouerami/TAPA/internal/common"
 	"github.com/Amir-Zouerami/TAPA/internal/config"
 	"github.com/Amir-Zouerami/TAPA/internal/errors"
 )
@@ -62,4 +63,28 @@ func applySchema(schemaEmbed embed.FS, db *sql.DB) error {
 
 	log.Println("Database schema applied successfully.")
 	return nil
+}
+
+func FlushAndSeedIfInDevelopmentMode(db *sql.DB) {
+	if common.IsInDevelopmentMode() {
+		err := FlushDB(db)
+		if err != nil {
+			log.Fatal("[TAPA_DEV_MODE] Error flushing the database:", err)
+		}
+
+		seeded, err := IsSeeded(db)
+		if err != nil {
+			log.Fatal("[TAPA_DEV_MODE] Error checking seed status:", err)
+		}
+
+		if !seeded {
+			log.Println("[TAPA_DEV_MODE] Seeding database...")
+			if err := SeedDB(db); err != nil {
+				log.Fatal("Failed to seed database:", err)
+			}
+		} else {
+			log.Println("[TAPA_DEV_MODE] Database already seeded.")
+		}
+	}
+
 }
