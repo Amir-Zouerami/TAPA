@@ -1,5 +1,4 @@
 -- This file initializes the database structure.
--- I don't like to use migration on small projects like this.
 
 CREATE TABLE IF NOT EXISTS collections (
     id            TEXT PRIMARY KEY,   

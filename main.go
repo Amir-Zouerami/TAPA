@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	"log"
+	"os"
 
 	"github.com/Amir-Zouerami/TAPA/internal/config"
 	"github.com/Amir-Zouerami/TAPA/internal/database"
@@ -21,7 +22,8 @@ func main() {
 
 	db, err := database.InitializeDB(dbSchema)
 	if err != nil {
-		log.Fatal("Database initialization failed:\n", err)
+		log.Printf("Database initialization failed: %v\n", err)
+		os.Exit(1)
 	}
 	defer db.Close()
 
@@ -45,6 +47,6 @@ func main() {
 	})
 
 	if err != nil {
-		log.Println("Error:", err.Error())
+		log.Fatal("Error:", err.Error())
 	}
 }

@@ -36,7 +36,7 @@ func InitializeDB(schemaEmbed embed.FS) (*sql.DB, error) {
 	}
 
 	if err := db.Ping(); err != nil {
-		return nil, errors.Wrap(errors.ErrCreateAppDirectory, err)
+		return nil, errors.Wrap(errors.ErrConnectingDatabase, err)
 	}
 
 	if err := applySchema(schemaEmbed, db); err != nil {
@@ -56,8 +56,23 @@ func applySchema(schemaEmbed embed.FS, db *sql.DB) error {
 		return errors.Wrap(errors.ErrSchemaRead, err)
 	}
 
-	_, err = db.Exec(string(rawDBSchema))
+	tx, err := db.Begin()
 	if err != nil {
+		return errors.Wrap(errors.ErrSchemaCreation, err)
+	}
+
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
+
+	_, err = tx.Exec(string(rawDBSchema))
+	if err != nil {
+		return errors.Wrap(errors.ErrSchemaCreation, err)
+	}
+
+	if err := tx.Commit(); err != nil {
 		return errors.Wrap(errors.ErrSchemaCreation, err)
 	}
 
