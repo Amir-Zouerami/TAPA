@@ -8,11 +8,6 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-type DashboardResult struct {
-	Result models.FullDashboardRequestList
-	Err    error
-}
-
 type CollectionsRepository interface {
 	GetAllCollections() ([]models.Collection, error)
 	GetAllFolders() ([]models.Folder, error)
