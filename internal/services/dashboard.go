@@ -13,8 +13,14 @@ type DashboardResult struct {
 	Err    error
 }
 
+type CollectionsRepository interface {
+	GetAllCollections() ([]models.Collection, error)
+	GetAllFolders() ([]models.Folder, error)
+	GetAllRequestSummaries() ([]models.RequestBasic, error)
+}
+
 type DashboardService struct {
-	repo *repository.CollectionsRepository
+	repo CollectionsRepository
 }
 
 // getFullRequestList runs three parallel DB calls, then merges collections, folders, and requests.

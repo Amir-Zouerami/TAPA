@@ -31,10 +31,12 @@ type RequestBasic struct {
 }
 
 type FullDashboardRequestList struct {
-	Collections   []PopulatedCollection `json:"collections"`
-	LooseRequests []RequestBasic        `json:"loose_requests"`
+	Collections []PopulatedCollection `json:"collections"`
+	// requests that do not belong to a collection nor a folder, are called "loose" in TAPA
+	LooseRequests []RequestBasic `json:"loose_requests"`
 }
 
+// TODO: for later usage
 // type RequestWithDetail struct {
 // 	Request
 // 	Headers     []RequestHeader     `json:"headers"`
