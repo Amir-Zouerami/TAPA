@@ -20,4 +20,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Database schema was revised and updated (seeding logic updated as well).
 - Use a separate sqlite db for development mode instead of flushing & rewriting the main database.
 - Sqlite db now runs in WAL mode for better concurrency.
-- Use `sqlx` instead of the standard library `sql` for ease of use (struct scanning, etc).
+- Use `sqlx` instead of the standard library `sql` for ease of use (struct scanning, etc.).
