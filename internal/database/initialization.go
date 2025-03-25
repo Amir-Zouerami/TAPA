@@ -1,12 +1,13 @@
 package database
 
 import (
-	"database/sql"
 	"embed"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/jmoiron/sqlx"
 
 	_ "modernc.org/sqlite"
 
@@ -17,7 +18,7 @@ import (
 
 // InitializeDB creates the database file and applies its schema from db-schema.sql.
 // The database is created at user config directory
-func InitializeDB(schemaEmbed embed.FS) (*sql.DB, error) {
+func InitializeDB(schemaEmbed embed.FS) (*sqlx.DB, error) {
 	configDir, err := os.UserConfigDir()
 	if err != nil {
 		return nil, errors.Wrap(errors.ErrGetUserConfigDirectory, err)
@@ -28,9 +29,15 @@ func InitializeDB(schemaEmbed embed.FS) (*sql.DB, error) {
 		return nil, errors.Wrap(errors.ErrCreateAppDirectory, err)
 	}
 
-	dbPath := filepath.Join(appDir, strings.ToLower(config.APP_NAME)+".sqlite")
+	var dbPath string
 
-	db, err := sql.Open("sqlite", dbPath)
+	if common.IsInDevelopmentMode() {
+		dbPath = filepath.Join(appDir, strings.ToLower(config.APP_NAME)+"_DEV"+".sqlite")
+	} else {
+		dbPath = filepath.Join(appDir, strings.ToLower(config.APP_NAME)+".sqlite")
+	}
+
+	db, err := sqlx.Open("sqlite", dbPath)
 	if err != nil {
 		return nil, errors.Wrap(errors.ErrOpeningDatabaseFile, err)
 	}
@@ -38,6 +45,8 @@ func InitializeDB(schemaEmbed embed.FS) (*sql.DB, error) {
 	if err := db.Ping(); err != nil {
 		return nil, errors.Wrap(errors.ErrConnectingDatabase, err)
 	}
+
+	setJournalMode(db)
 
 	if err := applySchema(schemaEmbed, db); err != nil {
 		return nil, err
@@ -47,8 +56,19 @@ func InitializeDB(schemaEmbed embed.FS) (*sql.DB, error) {
 	return db, nil
 }
 
+// sets the journal mode to WAL for better concurrency
+func setJournalMode(db *sqlx.DB) {
+	_, err := db.Exec("PRAGMA journal_mode=WAL;")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("--> WAL MODE ENABLED")
+}
+
 // applies the database schema from the embedded db-schema.sql
-func applySchema(schemaEmbed embed.FS, db *sql.DB) error {
+func applySchema(schemaEmbed embed.FS, db *sqlx.DB) error {
 	log.Println("Applying database schema...")
 
 	rawDBSchema, err := schemaEmbed.ReadFile(config.TAPA_DB_SCHEMA_FILE_PATH)
@@ -80,7 +100,7 @@ func applySchema(schemaEmbed embed.FS, db *sql.DB) error {
 	return nil
 }
 
-func FlushAndSeedIfInDevelopmentMode(db *sql.DB) {
+func FlushAndSeedIfInDevelopmentMode(db *sqlx.DB) {
 	if common.IsInDevelopmentMode() {
 		err := FlushDB(db)
 		if err != nil {

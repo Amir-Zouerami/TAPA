@@ -84,7 +84,7 @@ cd frontend && npm install && cd ..
 wails dev
 ```
 
-⚠️ **WARNING**: Setting `TAPA_ENV` environment variable (`TAPA_ENV=development wails dev`) will **FLUSH YOUR DATABASE** and seed it with placeholder data! Backup up everything before you attempt to do this. 
+⚠️ **WARNING**: Setting `TAPA_ENV` environment variable to development (i.e. `TAPA_ENV=development wails dev`) will **use the development database** which has a `_DEV` postfix to its name. In development mode TAPA will seed this database with placeholder data! Backup up everything before you attempt to do this (unless you are a developer, you should NOT).
 
 ## 📜 License
 TAPA is open-source and available under the **Apache License**.
