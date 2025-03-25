@@ -5,6 +5,7 @@ go 1.23.0
 toolchain go1.23.6
 
 require (
+	github.com/jmoiron/sqlx v1.4.0
 	github.com/wailsapp/wails/v2 v2.10.1
 	modernc.org/sqlite v1.36.1
 )
