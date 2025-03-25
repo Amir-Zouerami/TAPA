@@ -6,6 +6,7 @@ import (
 
 	"github.com/Amir-Zouerami/TAPA/internal/common"
 	"github.com/Amir-Zouerami/TAPA/internal/errors"
+	"github.com/Amir-Zouerami/TAPA/internal/services"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/linux"
@@ -27,7 +28,7 @@ type appConfig struct {
 }
 
 // GetAppConfig creates application configuration with default settings.
-func GetAppConfig(assets fs.FS, app *App) (*appConfig, error) {
+func GetAppConfig(assets fs.FS, app *App, serviceContainer *services.Services) (*appConfig, error) {
 	icon, err := common.ReadEmbeddedFile(assets, TAPA_ICON_NAME)
 
 	if err != nil {
@@ -51,6 +52,7 @@ func GetAppConfig(assets fs.FS, app *App) (*appConfig, error) {
 		},
 		Bind: []any{
 			app,
+			serviceContainer.Dashboard,
 		},
 	}, nil
 }

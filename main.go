@@ -7,6 +7,7 @@ import (
 
 	"github.com/Amir-Zouerami/TAPA/internal/config"
 	"github.com/Amir-Zouerami/TAPA/internal/database"
+	"github.com/Amir-Zouerami/TAPA/internal/services"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
 )
@@ -25,11 +26,13 @@ func main() {
 		log.Printf("Database initialization failed: %v\n", err)
 		os.Exit(1)
 	}
+
 	defer db.Close()
 
 	database.FlushAndSeedIfInDevelopmentMode(db)
+	serviceContainer := services.NewServiceContainer(db)
+	appConfig, err := config.GetAppConfig(assets, app, serviceContainer)
 
-	appConfig, err := config.GetAppConfig(assets, app)
 	if err != nil {
 		log.Fatal("Could not bootstrap the application:\n", err)
 	}
