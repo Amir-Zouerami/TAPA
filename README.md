@@ -1,6 +1,6 @@
 # TAPA
 
-![tapa-cover-github-min](https://github.com/user-attachments/assets/8f7bf40a-bcd4-492e-8526-257252d1118b)
+![tapa-welcome-page-HD-min](https://github.com/user-attachments/assets/b7c0fe42-4399-498c-9d00-c85e4d92af99)
 
 ## 🚀 Introduction
 TAPA (The Actual Postman Alternative) was born out of frustration with existing HTTP client tools. Postman feels bloated and heavy, while other alternatives that tried to replace it either lack essential features, lack a modern UI/UX, or Feel bloated with unnecessary functionalities. I wanted something that was:
