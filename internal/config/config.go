@@ -15,16 +15,19 @@ import (
 
 // appConfig holds application settings.
 type appConfig struct {
-	Title            string
-	Width            int
-	Height           int
-	Frameless        bool
-	WindowStartState options.WindowStartState
-	AssetServer      *assetserver.Options
-	Linux            *linux.Options
-	Mac              *mac.Options
-	Bind             []any
-	OnStartup        func(ctx context.Context)
+	Title              string
+	Width              int
+	MinWidth           int
+	Height             int
+	Frameless          bool
+	WindowStartState   options.WindowStartState
+	AssetServer        *assetserver.Options
+	Linux              *linux.Options
+	Mac                *mac.Options
+	Bind               []any
+	OnStartup          func(ctx context.Context)
+	Fullscreen         bool
+	SingleInstanceLock *options.SingleInstanceLock
 }
 
 // GetAppConfig creates application configuration with default settings.
@@ -38,14 +41,17 @@ func GetAppConfig(assets fs.FS, app *App, serviceContainer *services.Services) (
 	return &appConfig{
 		Title:            APP_NAME,
 		Width:            APP_WIDTH,
+		MinWidth:         APP_MIN_WIDTH,
 		Height:           APP_HEIGHT,
+		Frameless:        true,
+		Fullscreen:       false,
 		WindowStartState: options.Maximised,
 		OnStartup:        app.startup,
 		Linux: &linux.Options{
 			Icon: icon,
 		},
 		Mac: &mac.Options{
-			About: &mac.AboutInfo{Title: APP_NAME, Message: MACOS_ABOUT_MESSAGE},
+			About: &mac.AboutInfo{Title: APP_NAME, Message: MACOS_ABOUT_MESSAGE, Icon: icon},
 		},
 		AssetServer: &assetserver.Options{
 			Assets: assets,
