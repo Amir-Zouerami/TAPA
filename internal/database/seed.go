@@ -5,6 +5,8 @@ import (
 	"log"
 	"time"
 
+	"github.com/Amir-Zouerami/TAPA/internal/models"
+	"github.com/Amir-Zouerami/TAPA/internal/types"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -48,6 +50,11 @@ func SeedDB(db *sqlx.DB) error {
 	}
 
 	if err := seedUserSettings(db); err != nil {
+		return err
+	}
+
+	// New: Seed the app state
+	if err := seedAppState(db); err != nil {
 		return err
 	}
 
@@ -124,7 +131,7 @@ func seedRequestAndDependencies(db *sqlx.DB, post PlaceholderPost) error {
 
 	_, err := db.Exec(`
 		INSERT INTO requests 
-		(id, collection_id, folder_id, position, name, method, url, body, timeout, allow_redirects, ssl_verification, remove_referer_on_redirect, encode_url)
+		(id, collection_id, folder_id, position, name, method, url, body, timeout, allow_redirects, ssl_verification, remove_referrer_on_redirect, encode_url)
 		VALUES (?, 101, 201, ?, ?, 'GET', ?, '', 30000, 1, 1, 0, 1);
 	`, newID, newID, post.Title, fmt.Sprintf("https://jsonplaceholder.typicode.com/posts/%d", post.ID))
 
@@ -140,6 +147,10 @@ func seedRequestAndDependencies(db *sqlx.DB, post PlaceholderPost) error {
 		return err
 	}
 
+	if err := seedRequestCookies(db, newID, post); err != nil {
+		return err
+	}
+
 	if err := seedRequestHistory(db, newID, post); err != nil {
 		return err
 	}
@@ -148,11 +159,14 @@ func seedRequestAndDependencies(db *sqlx.DB, post PlaceholderPost) error {
 		return err
 	}
 
+	if err := seedRequestExamples(db, newID, post); err != nil {
+		return err
+	}
+
 	return nil
 }
 
 // seedRequestHeaders inserts a sample header for a given request.
-// Note: The id field is omitted to let the database autogenerate it.
 func seedRequestHeaders(db *sqlx.DB, requestID int, post PlaceholderPost) error {
 	_, err := db.Exec(`
 		INSERT INTO request_headers (request_id, key, value) VALUES 
@@ -165,7 +179,6 @@ func seedRequestHeaders(db *sqlx.DB, requestID int, post PlaceholderPost) error 
 }
 
 // seedRequestQueryParams inserts a sample query parameter for a given request.
-// The id field is omitted.
 func seedRequestQueryParams(db *sqlx.DB, requestID int, post PlaceholderPost) error {
 	_, err := db.Exec(`
 		INSERT INTO request_query_params (request_id, key, value) VALUES 
@@ -173,6 +186,18 @@ func seedRequestQueryParams(db *sqlx.DB, requestID int, post PlaceholderPost) er
 	`, requestID)
 	if err != nil {
 		return fmt.Errorf("failed to insert query parameter for request '%s': %w", post.Title, err)
+	}
+	return nil
+}
+
+// seedRequestCookies inserts a sample cookie for a given request.
+func seedRequestCookies(db *sqlx.DB, requestID int, post PlaceholderPost) error {
+	_, err := db.Exec(`
+		INSERT INTO request_cookies (request_id, key, value) VALUES 
+		(?, 'session_id', 'abcdef123456');
+	`, requestID)
+	if err != nil {
+		return fmt.Errorf("failed to insert cookie for request '%s': %w", post.Title, err)
 	}
 	return nil
 }
@@ -192,8 +217,8 @@ func seedRequestHistory(db *sqlx.DB, requestID int, post PlaceholderPost) error 
 }
 
 // seedRequestScripts inserts two sample scripts for a given request.
-// The id field is omitted so that autoincrement works.
 func seedRequestScripts(db *sqlx.DB, requestID int, post PlaceholderPost) error {
+	// Pre-request script
 	_, err := db.Exec(`
 		INSERT INTO request_scripts (request_id, script) VALUES 
 		(?, ?);
@@ -202,6 +227,7 @@ func seedRequestScripts(db *sqlx.DB, requestID int, post PlaceholderPost) error 
 		return fmt.Errorf("failed to insert pre-request script for request '%s': %w", post.Title, err)
 	}
 
+	// Test script
 	_, err = db.Exec(`
 		INSERT INTO request_scripts (request_id, script) VALUES 
 		(?, ?);
@@ -212,9 +238,22 @@ func seedRequestScripts(db *sqlx.DB, requestID int, post PlaceholderPost) error 
 	return nil
 }
 
+// seedRequestExamples inserts a sample request example for a given request.
+func seedRequestExamples(db *sqlx.DB, requestID int, post PlaceholderPost) error {
+	_, err := db.Exec(`
+		INSERT INTO request_examples 
+		(request_id, method, url, headers, query_params, body, status_code, response, response_headers, response_cookies, response_time, data_volume)
+		VALUES (?, 'GET', ?, '{"Content-Type": "application/json"}', '{"userId": "1"}', '', 200, 'Sample response body', '{"Content-Length": "123"}', '{"session_id": "abcdef123456"}', 120, 789);
+	`, requestID, fmt.Sprintf("https://jsonplaceholder.typicode.com/posts/%d", post.ID))
+	if err != nil {
+		return fmt.Errorf("failed to insert request example for '%s': %w", post.Title, err)
+	}
+	return nil
+}
+
 // seedEnvironment inserts a sample environment and its variables.
 func seedEnvironment(db *sqlx.DB) error {
-	// ID 401 for environment.
+	// Insert a sample environment with ID 401.
 	_, err := db.Exec(`
 		INSERT INTO environments (id, name) VALUES
 		(401, 'Seeded Development');
@@ -264,11 +303,35 @@ func seedKeyboardShortcuts(db *sqlx.DB) error {
 // seedUserSettings inserts a sample user settings record.
 func seedUserSettings(db *sqlx.DB) error {
 	_, err := db.Exec(`
-		INSERT INTO user_settings (id, theme, max_history, language, font_family, font_size) VALUES
-		(1, 'system', 200, 'en', 'Arial', 14);
+		INSERT INTO user_settings (id, theme, max_history, font_size) VALUES
+		(1, 'dark', 200, 16);
 	`)
 	if err != nil {
 		return fmt.Errorf("failed to insert user settings: %w", err)
+	}
+	return nil
+}
+
+// seedAppState inserts the default application state.
+func seedAppState(db *sqlx.DB) error {
+	// Create an initial AppState using your models package.
+	appState := models.AppState{
+		ID:                  1,
+		SelectedEnvironment: nil,
+		OpenTabs:            []models.Tab{},
+		UpdatedAt:           types.NewSqliteTime(time.Now()),
+	}
+	// Serialize the open tabs for storage.
+	if err := appState.BeforeSave(); err != nil {
+		return fmt.Errorf("failed to serialize open tabs: %w", err)
+	}
+
+	_, err := db.Exec(`
+		INSERT INTO app_state (id, selected_environment, open_tabs, first_launch, updated_at)
+		VALUES (?, ?, ?, 1, CURRENT_TIMESTAMP);
+	`, appState.ID, appState.SelectedEnvironment, appState.OpenTabsJSON)
+	if err != nil {
+		return fmt.Errorf("failed to insert app state: %w", err)
 	}
 	return nil
 }
@@ -290,7 +353,8 @@ func FlushDB(db *sqlx.DB) error {
 	tables := []string{
 		"collections", "folders", "requests", "request_headers", "request_query_params",
 		"request_cookies", "environments", "environment_variables", "collection_variables",
-		"request_history", "request_scripts", "sync_metadata", "keyboard_shortcuts", "user_settings", "app_state",
+		"request_history", "request_scripts", "request_examples", "sync_metadata", "keyboard_shortcuts",
+		"user_settings", "app_state",
 	}
 
 	_, _ = db.Exec("PRAGMA foreign_keys = OFF;")
