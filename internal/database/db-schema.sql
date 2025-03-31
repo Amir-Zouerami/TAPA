@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS collections (
     name                        TEXT NOT NULL,
     description                 TEXT,
     position                    INTEGER NOT NULL,
-    created_at                  DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at                  DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -14,7 +13,6 @@ CREATE TABLE IF NOT EXISTS folders (
     collection_id               INTEGER NOT NULL,
     name                        TEXT NOT NULL,
     position                    INTEGER NOT NULL,
-    created_at                  DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at                  DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (collection_id) REFERENCES collections(id) ON DELETE CASCADE
 );
@@ -30,7 +28,7 @@ CREATE TABLE IF NOT EXISTS collection_variables (
 
 CREATE TABLE IF NOT EXISTS requests (
     id                          INTEGER PRIMARY KEY AUTOINCREMENT,
-    collection_id               INTEGER, -- Nullable to allow standalone requests
+    collection_id               INTEGER NOT NULL,
     folder_id                   INTEGER,
     position                    INTEGER NOT NULL,
     name                        TEXT NOT NULL,
@@ -42,7 +40,7 @@ CREATE TABLE IF NOT EXISTS requests (
     timeout                     INTEGER DEFAULT 30000,
     allow_redirects             BOOLEAN DEFAULT TRUE,
     ssl_verification            BOOLEAN DEFAULT TRUE,
-    remove_referer_on_redirect  BOOLEAN DEFAULT FALSE,
+    remove_referrer_on_redirect BOOLEAN DEFAULT FALSE,
     encode_url                  BOOLEAN DEFAULT TRUE,
     created_at                  DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at                  DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -79,7 +77,7 @@ CREATE TABLE IF NOT EXISTS request_cookies (
 CREATE TABLE IF NOT EXISTS environments (
     id                          INTEGER PRIMARY KEY AUTOINCREMENT,
     name                        TEXT NOT NULL,
-    created_at                  DATETIME DEFAULT CURRENT_TIMESTAMP
+    updated_at                  DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS environment_variables (
@@ -148,7 +146,6 @@ CREATE TABLE IF NOT EXISTS test_results (
     request_id                  INTEGER NOT NULL,
     test_name                   TEXT NOT NULL,
     result                      TEXT,
-    created_at                  DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (request_id)    REFERENCES requests(id) ON DELETE CASCADE
 );
 
@@ -167,18 +164,19 @@ CREATE TABLE IF NOT EXISTS keyboard_shortcuts (
 );
 
 CREATE TABLE IF NOT EXISTS user_settings (
-    id                          INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1,
-    theme                       TEXT CHECK(theme IN ('light', 'dark', 'system')) DEFAULT 'dark',
-    max_history                 INTEGER DEFAULT 200,
-    language                    TEXT DEFAULT 'en',
-    font_family                 TEXT DEFAULT 'default',
-    font_size                   INTEGER DEFAULT 14
+    id          INTEGER PRIMARY KEY CHECK (id = 1),
+    theme       TEXT NOT NULL CHECK (theme IN ('light', 'dark', 'system')) DEFAULT 'dark',
+    max_history INTEGER NOT NULL DEFAULT 300,
+    font_size   INTEGER NOT NULL DEFAULT 16
 );
+
+INSERT OR IGNORE INTO user_settings (id) VALUES (1);
 
 CREATE TABLE IF NOT EXISTS app_state (
     id                          INTEGER PRIMARY KEY DEFAULT 1,
     selected_environment        INTEGER,
     open_tabs                   TEXT,
+    first_launch                BOOLEAN DEFAULT 1,
     updated_at                  DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (selected_environment) REFERENCES environments(id) ON DELETE SET NULL
 );
