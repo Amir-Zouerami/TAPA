@@ -12,7 +12,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options"
 )
 
-//go:embed all:frontend/dist build/tapa.png
+//go:embed all:frontend/dist build/appicon.png
 var assets embed.FS
 
 //go:embed internal/database/db-schema.sql
@@ -38,15 +38,19 @@ func main() {
 	}
 
 	err = wails.Run(&options.App{
-		Title:            appConfig.Title,
-		Width:            appConfig.Width,
-		Height:           appConfig.Height,
-		WindowStartState: appConfig.WindowStartState,
-		AssetServer:      appConfig.AssetServer,
-		Linux:            appConfig.Linux,
-		Mac:              appConfig.Mac,
-		OnStartup:        appConfig.OnStartup,
-		Bind:             appConfig.Bind,
+		Title:              appConfig.Title,
+		Width:              appConfig.Width,
+		Height:             appConfig.Height,
+		MinWidth:           appConfig.MinWidth,
+		WindowStartState:   appConfig.WindowStartState,
+		AssetServer:        appConfig.AssetServer,
+		Linux:              appConfig.Linux,
+		Mac:                appConfig.Mac,
+		OnStartup:          appConfig.OnStartup,
+		Bind:               appConfig.Bind,
+		Fullscreen:         appConfig.Fullscreen,
+		Frameless:          appConfig.Frameless,
+		SingleInstanceLock: appConfig.SingleInstanceLock,
 	})
 
 	if err != nil {
