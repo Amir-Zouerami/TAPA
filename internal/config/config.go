@@ -59,6 +59,13 @@ func GetAppConfig(assets fs.FS, app *App, serviceContainer *services.Services) (
 		Bind: []any{
 			app,
 			serviceContainer.Dashboard,
+			serviceContainer.AppState,
+			serviceContainer.Environment,
+			serviceContainer.Request,
+		},
+		SingleInstanceLock: &options.SingleInstanceLock{
+			UniqueId:               "github.com/Amir-Zouerami/TAPA",
+			OnSecondInstanceLaunch: app.OnSecondInstanceLaunch,
 		},
 	}, nil
 }
