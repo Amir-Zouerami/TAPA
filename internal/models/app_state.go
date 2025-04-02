@@ -2,20 +2,18 @@ package models
 
 import (
 	"encoding/json"
-	"time"
+
+	"github.com/Amir-Zouerami/TAPA/internal/types"
 )
 
 // AppState represents the last state of the application UI.
 type AppState struct {
-	ID                  int  `json:"id" db:"id"`
-	SelectedEnvironment *int `json:"selected_environment,omitempty" db:"selected_environment"`
-
-	// OpenTabs contains the list of currently open tabs in the UI.
-	OpenTabs []Tab `json:"open_tabs" db:"-"` // Not directly mapped to DB
-
-	// Raw JSON storage for OpenTabs (used only for database operations).
-	OpenTabsJSON string    `json:"-" db:"open_tabs"`
-	UpdatedAt    time.Time `json:"updated_at" db:"updated_at"`
+	ID                  int              `json:"id" db:"id"`
+	SelectedEnvironment *int             `json:"selected_environment" db:"selected_environment"`
+	FirstLaunch         bool             `json:"first_launch" db:"first_launch"`
+	OpenTabs            []Tab            `json:"open_tabs" db:"-"` // Not directly mapped to DB (list of currently open tabs in the UI)
+	OpenTabsJSON        string           `json:"-" db:"open_tabs"` // Raw JSON storage for OpenTabs (used only for database operations).
+	UpdatedAt           types.SqliteTime `json:"updated_at" db:"updated_at"`
 }
 
 // Tab represents an open tab in the application UI.
