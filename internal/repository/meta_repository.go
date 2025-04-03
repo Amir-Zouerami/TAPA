@@ -90,7 +90,7 @@ func (r *MetaRepository) GetLastAppState(ctx context.Context) (models.AppState, 
 func (r *MetaRepository) SaveLastAppState(ctx context.Context, state models.AppState) error {
 	_, err := r.db.NamedExecContext(ctx, `
         UPDATE app_state 
-        SET last_tabs = :last_tabs, last_environment = :last_environment
+        SET open_tabs = :open_tabs, selected_environment = :selected_environment
         WHERE id = 1
     `, state)
 
