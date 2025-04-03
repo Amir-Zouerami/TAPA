@@ -1,18 +1,19 @@
 package models
 
-import "time"
+import (
+	"github.com/Amir-Zouerami/TAPA/internal/types"
+)
 
 type Collection struct {
-	ID          int       `json:"id" db:"id"`
-	Name        string    `json:"name" db:"name"`
-	Description string    `json:"description,omitempty" db:"description"`
-	Position    int       `json:"position" db:"position"`
-	CreatedAt   time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at" db:"updated_at"`
+	ID          int              `json:"id" db:"id"`
+	Name        string           `json:"name" db:"name"`
+	Description string           `json:"description,omitempty" db:"description"`
+	Position    int              `json:"position" db:"position"`
+	UpdatedAt   types.SqliteTime `json:"updated_at" db:"updated_at"`
 }
 
-type PopulatedCollection struct {
-	Collection Collection        `json:"collection"`
-	Folders    []PopulatedFolder `json:"folders"`
-	Requests   []RequestBasic    `json:"requests"` // requests with no folder.
-}
+// type PopulatedCollection struct {
+// 	Collection Collection        `json:"collection"`
+// 	Folders    []PopulatedFolder `json:"folders"`
+// 	Requests   []RequestSummary    `json:"requests"` // requests with no folder.
+// }

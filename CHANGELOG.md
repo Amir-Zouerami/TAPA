@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New errors for collections repository layer.
 - Database models based on the schema.
 - Collection repository and dashboard service.
+- app state service.
+- environment service.
+- request service.
+- service container (to orchestrate all services).
+- multiple repositories to be used in the service layers.
 
 ### Changed
 
@@ -21,3 +26,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use a separate sqlite db for development mode instead of flushing & rewriting the main database.
 - Sqlite db now runs in WAL mode for better concurrency.
 - Use `sqlx` instead of the standard library `sql` for ease of use (struct scanning, etc.).
+- Data returned by the dashboard service is now normalized. 

@@ -1,9 +1,11 @@
 package models
 
-import "time"
+import (
+	"github.com/Amir-Zouerami/TAPA/internal/types"
+)
 
 type Environment struct {
-	ID        int       `json:"id" db:"id"`
-	Name      string    `json:"name" db:"name"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	ID        int              `json:"id" db:"id"`
+	Name      string           `json:"name" db:"name"`
+	UpdatedAt types.SqliteTime `json:"updated_at" db:"updated_at"`
 }
