@@ -16,6 +16,7 @@ type EnvironmentsRepository struct {
 	db *sqlx.DB
 }
 
+// ListAllEnvironments retrieves all environments from the database
 func (r *EnvironmentsRepository) ListAllEnvironments(ctx context.Context) ([]models.Environment, error) {
 	var environmentsList []models.Environment
 	query := `
@@ -29,6 +30,7 @@ func (r *EnvironmentsRepository) ListAllEnvironments(ctx context.Context) ([]mod
 	return environmentsList, nil
 }
 
+// GetEnvironmentDetails retrieves all environment variables for a specific environment
 func (r *EnvironmentsRepository) GetEnvironmentDetails(ctx context.Context, envID int) ([]models.EnvironmentVariable, error) {
 	var allVariables []models.EnvironmentVariable
 

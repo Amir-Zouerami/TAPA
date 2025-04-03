@@ -67,7 +67,7 @@ func (r *MetaRepository) GetUserSettings(ctx context.Context) (models.UserSettin
 	return settings, nil
 }
 
-// TODO: uncomment
+// FIXME: implement this.
 // func (r *MetaRepository) UpdateUserSettings(ctx context.Context, settings models.UserSettings) error {
 // 	query := `
 //         INSERT INTO user_settings (id, theme, max_history, font_size)
