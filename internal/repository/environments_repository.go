@@ -32,7 +32,8 @@ func (r *EnvironmentsRepository) ListAllEnvironments(ctx context.Context) ([]mod
 func (r *EnvironmentsRepository) GetEnvironmentDetails(ctx context.Context, envID int) ([]models.EnvironmentVariable, error) {
 	var allVariables []models.EnvironmentVariable
 
-	err := r.db.Select(
+	err := r.db.SelectContext(
+		ctx,
 		&allVariables,
 		"SELECT key, value FROM environment_variables WHERE environment_id = ?",
 		envID,
