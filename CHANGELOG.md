@@ -14,11 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New errors for collections repository layer.
 - Database models based on the schema.
 - Collection repository and dashboard service.
-- app state service.
-- environment service.
-- request service.
-- service container (to orchestrate all services).
-- multiple repositories to be used in the service layers.
+- App state service.
+- Environment service.
+- Request service.
+- Service container (to orchestrate all services).
+- Multiple repositories to be used in the service layers.
+- 3 stores using `Zustand`.
 
 ### Changed
 
