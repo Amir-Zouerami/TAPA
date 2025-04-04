@@ -135,7 +135,12 @@ func (s *DashboardService) LoadDashboardData() (models.DashboardData, error) {
 			return err
 		}
 
-		dashboardData.Environments = environments
+		environmentsMap := make(map[int]models.Environment, len(environments))
+		for _, env := range environments {
+			environmentsMap[env.ID] = env
+		}
+
+		dashboardData.Environments = environmentsMap
 		return nil
 	})
 

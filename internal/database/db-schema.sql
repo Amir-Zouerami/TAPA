@@ -175,6 +175,7 @@ INSERT OR IGNORE INTO user_settings (id) VALUES (1);
 CREATE TABLE IF NOT EXISTS app_state (
     id                          INTEGER PRIMARY KEY DEFAULT 1,
     selected_environment        INTEGER,
+    selected_tab                INTEGER,
     open_tabs                   TEXT,
     first_launch                BOOLEAN DEFAULT 1,
     updated_at                  DATETIME DEFAULT CURRENT_TIMESTAMP,

@@ -83,7 +83,7 @@ func (r *MetaRepository) GetUserSettings(ctx context.Context) (models.UserSettin
 
 func (r *MetaRepository) GetLastAppState(ctx context.Context) (models.AppState, error) {
 	var state models.AppState
-	err := r.db.GetContext(ctx, &state, "SELECT id, selected_environment, open_tabs, first_launch, updated_at FROM app_state WHERE id = 1")
+	err := r.db.GetContext(ctx, &state, "SELECT id, selected_environment, selected_tab, open_tabs, first_launch, updated_at FROM app_state WHERE id = 1")
 	if err != nil {
 		return models.AppState{}, err
 	}

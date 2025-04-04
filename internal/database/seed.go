@@ -259,7 +259,15 @@ func seedEnvironment(db *sqlx.DB) error {
 		(401, 'Seeded Development');
 	`)
 	if err != nil {
-		return fmt.Errorf("failed to insert environment: %w", err)
+		return fmt.Errorf("failed to insert environment 1: %w", err)
+	}
+
+	_, err = db.Exec(`
+	INSERT INTO environments (id, name) VALUES
+	(402, 'Seeded Development2');
+	`)
+	if err != nil {
+		return fmt.Errorf("failed to insert environment 2: %w", err)
 	}
 
 	_, err = db.Exec(`
@@ -318,6 +326,7 @@ func seedAppState(db *sqlx.DB) error {
 	appState := models.AppState{
 		ID:                  1,
 		SelectedEnvironment: nil,
+		SelectedTab:         nil,
 		OpenTabs:            []models.Tab{},
 		UpdatedAt:           types.NewSqliteTime(time.Now()),
 	}
@@ -327,9 +336,9 @@ func seedAppState(db *sqlx.DB) error {
 	}
 
 	_, err := db.Exec(`
-		INSERT INTO app_state (id, selected_environment, open_tabs, first_launch, updated_at)
-		VALUES (?, ?, ?, 1, CURRENT_TIMESTAMP);
-	`, appState.ID, appState.SelectedEnvironment, appState.OpenTabsJSON)
+		INSERT INTO app_state (id, selected_environment, selected_tab, open_tabs, first_launch, updated_at)
+		VALUES (?, ?, ?, ?, 1, CURRENT_TIMESTAMP);
+	`, appState.ID, appState.SelectedEnvironment, appState.SelectedTab, appState.OpenTabsJSON)
 	if err != nil {
 		return fmt.Errorf("failed to insert app state: %w", err)
 	}

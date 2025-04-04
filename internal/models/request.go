@@ -33,7 +33,7 @@ type RequestSummary struct {
 }
 
 type CollectionsTree struct {
-	Collections map[int]Collection     `json:"collection"`
+	Collections map[int]Collection     `json:"collections"`
 	Folders     map[int]Folder         `json:"folders"`
 	RequestList map[int]RequestSummary `json:"request_list"`
 }
