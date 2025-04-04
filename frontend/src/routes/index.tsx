@@ -1,24 +1,43 @@
-import { createFileRoute } from '@tanstack/react-router';
-import '../App.css';
+import "../App.css";
+import { UI_MESSAGES } from "@/config/constants";
+import ErrorAlert from "@/components/Alerts/ErrorAlert";
+import { useLoadDashboardData } from "@/hooks/api/dashboard";
+import { useInitializeState } from "@/hooks/useInitializeState";
+import CommandPalette from "@/components/layout/CommandPalette";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { IsFirstLaunch } from "@wails/go/services/DashboardService";
+// import { useDisableContextMenu } from "@/hooks/useDisableContextMenu";
+import InitialLoadingPage from "@/components/reusable/InitialLoadingPage";
+import ApplicationMenuBar from "@/components/layout/menuBar/ApplicationMenuBar";
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute("/")({
+	loader: async () => {
+		const result = await IsFirstLaunch();
+		if (result) {
+			throw redirect({ to: "/welcome", replace: true });
+		}
+	},
+	staleTime: Infinity,
 	component: App,
 });
 
 function App() {
+	// TODO: enable later
+	// useDisableContextMenu();
+	const { isPending, error, data } = useLoadDashboardData();
+	useInitializeState(data);
+
+	if (isPending) return <InitialLoadingPage />;
+	if (error) return <ErrorAlert open reportable message={UI_MESSAGES.ERR_LOADING_INITIAL_STATE} />;
+
 	return (
-		<div className="App">
-			<header className="">
-				<p>
-					Edit <code>src/routes/index.tsx</code> and save to reload.
-				</p>
-				<a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-					Learn React
-				</a>
-				<a className="App-link" href="https://tanstack.com" target="_blank" rel="noopener noreferrer">
-					Learn TanStack
-				</a>
-			</header>
-		</div>
+		<>
+			<CommandPalette />
+			<div className="App h-dvh w-dvw overflow-hidden">
+				<ApplicationMenuBar />
+				<br />
+				<code>{JSON.stringify(data)}</code>
+			</div>
+		</>
 	);
 }
